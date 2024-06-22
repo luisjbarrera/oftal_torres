@@ -1,0 +1,22 @@
+#canvasContainer {
+    position: relative;
+    margin: 20px auto;
+    border: 1px solid #000;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.icono {
+    cursor: pointer;
+    margin: 5px;
+}
+
+.grupoIconos {
+    display: inline-block;
+    margin-right: 20px;
+}
+

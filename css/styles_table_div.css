@@ -1,0 +1,6 @@
+.encabezado_div_indicerefraccion {
+    text-align: center; /* Centrado horizontal */
+    display: flex; /* Centrado vertical con flexbox */
+    align-items: center;
+    padding: 10px 0;  /* Alternativa para centrado vertical */
+}

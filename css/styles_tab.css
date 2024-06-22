@@ -1,0 +1,94 @@
+/* Estilos generales */
+
+body {
+    font-family: sans-serif;
+    font-size: 16px;
+  }
+  
+  /* Estilos para el panel */
+  
+  .x_panel {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 15px;
+  }
+  
+  /* Estilos para el título del panel */
+  
+  .x_title {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* Estilos para el icono del título del panel */
+  
+  .fa {
+    font-size: 20px;
+  }
+  
+  /* Estilos para las pestañas */
+  
+  .nav-tabs {
+    margin-bottom: 10px;
+  }
+  
+  .nav-link {
+    padding: 10px 15px;
+    border-radius: 4px;
+    color: #444444;
+    font-weight: 600;
+  }
+  
+  .nav-link.active {
+    background-color: #007bff;
+    color: #ffffff;
+    border-color: #007bff;
+  }
+  
+  /* Regla para las pestañas no activas */
+  .nav-link:not(.active) {
+    background-color: #18648c;
+    color: #ffffff;
+  }
+
+  /* Regla para las pestañas no activas con el cursor sobre ellas */
+  .nav-link:not(.active):hover {
+    color: hsl(201, 80%, 43%);
+  }
+
+  /* Estilos para el contenido de las pestañas */
+  
+  .tab-content {
+    padding: 15px;
+  }
+  
+  .tab-pane {
+    display: none;
+  }
+  
+  .tab-content .tab-pane:not(.active) {
+    display: none;
+  }
+  
+  .tab-content .tab-pane.active {
+    display: block;
+  }
+  
+  /* Estilos específicos para el código HTML proporcionado */
+  
+  .col-md-6 {
+    width: 50%;
+  }
+  
+  .col-sm-6 {
+    width: 50%;
+  }
+
+  .position-etiqueta {
+    position: absolute;
+    top: 50%; /* Posiciona la etiqueta verticalmente en el centro */
+    left: 50%; /* Posiciona la etiqueta horizontalmente en el centro */
+    transform: translate(-50%, -50%); /* Ajusta la posición para que quede centrada */
+}

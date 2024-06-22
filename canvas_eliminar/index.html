@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editor de Imágenes</title>
+    <!-- Incluir Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <!-- Incluir Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap no hace nada -->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- NProgress no hace nada -->
+    <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="build/css/custom.min.css" rel="stylesheet">
+    
+    <style>
+        #canvasContainer {
+            position: relative;
+            width: 602px;  /* Ancho de 500px */
+            height: 402px; /* Altura de 300px */
+            
+        }
+        #canvasContainer2 {
+            position: relative;
+            margin: 0px;  /* Margen de 10px alrededor del contenedor */
+            padding: 0px; /* Relleno de 20px dentro del contenedor */
+            height: 40px; /* Altura de 300px */
+            border-radius: 10px;  /* Esquinas redondeadas con un radio de 10px */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra suave */
+            border: 1px solid #000;  /* Borde de 1px de grosor, sólido y negro */
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .icono {
+            cursor: pointer;
+            margin: 5px;
+            color: #000;  /* Color negro */
+        }
+        
+    </style>
+</head>
+<body class="nav-md">
+    <div class="container body"> <!-- Añadido contenedor principal -->
+        <div class="main_container">
+            <!-- Smart Wizard -->
+            <p>Atenci&oacute;n del paciente.</p>
+            <div id="wizard" class="form_wizard wizard_horizontal">
+                <ul class="wizard_steps">
+                    <li>
+                        <a href="#step-1">
+                        <span class="step_no">1</span>
+                        <span class="step_descr">
+                            Step 1<br />
+                            <small>Anamnesis</small>
+                        </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#step-2">
+                        <span class="step_no">2</span>
+                        <span class="step_descr">
+                            Step 2<br />
+                            <small>Odontograma</small>
+                        </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#step-3">
+                        <span class="step_no">3</span>
+                        <span class="step_descr">
+                            Step 3<br />
+                            <small>Especificaciones</small>
+                        </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#step-4">
+                        <span class="step_no">4</span>
+                        <span class="step_descr">
+                            Step 4<br />
+                            <small>Diagn&oacute;stico</small>
+                        </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#step-5">
+                            <span class="step_no">5</span>
+                            <span class="step_descr">
+                                Step 5<br />
+                                <small>Examenes auxiliares</small>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#step-6">
+                            <span class="step_no">6</span>
+                            <span class="step_descr">
+                                Step 6<br />
+                                <small>Referencias</small>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#step-7">
+                            <span class="step_no">7</span>
+                            <span class="step_descr">
+                                Step 7<br />
+                                <small>Receta m&eacute;dica</small>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div id="step-1">
+                    <h2 class="StepTitle">Step 1 Anamnesis</h2>
+                    <div class="row justify-content-center"> <!-- Centrado horizontal -->
+                        <div class="col-md-6"> <!-- Ajusta el ancho según prefieras -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                        <form action="">
+                                            <div class="form-group row">
+                                                <div class="col-md-10">
+                                                    <label for="nombrePaciente">Nombre del Paciente:</label>
+                                                    <input type="text" id="nombrePaciente" name="txtnombrepaciente" class="form-control">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-md-3 col-sm-3 " for="edad">Edad:</label>
+                                                    <input type="text" id="edad" name="txtedad" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <label for="motivoConsulta">Motivo de la Consulta:</label>
+                                                    <textarea id="motivoConsulta" name="motivoConsulta" required="required" class="form-control" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Registre el motivo de la consulta" data-parsley-validation-threshold="10"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <label for="antecedentes">Antecedentes:</label>
+                                                    <textarea id="antecedentes" name="txtAntecedentes" required="required" class="form-control" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Registre los antecedentes del paciente" data-parsley-validation-threshold="10"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <label for="examenClinico">Examen Clínico:</label>
+                                                    <select id="examenClinico" class="form-control" required>
+                                                        <option value="">Seleccione un tipo de examen....</option>
+                                                        <option value="press">Extracción</option>
+                                                        <option value="net">Implante</option>
+                                                        <option value="mouth">Curación</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <link rel="stylesheet" href="css/styles.css">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div> <!-- Fin step 1 -->
+
+                <div id="step-2">
+                    <h2 class="StepTitle">Step 2 Odontograma</h2>
+                    <!-- Sección de herramientas e imagen -->
+                    <div class="row justify-content-center"> <!-- Centrado horizontal -->
+                        <div class="col-md-6"> <!-- Ajusta el ancho según prefieras -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <!-- Herramientas -->
+                                            <div id="canvasContainer2" class="mb-5">
+                                                <i id="pincel" class="icono fas fa-paint-brush" title="Pincel"></i>
+                                                <i id="colorAzul" class="icono fas fa-circle" style="color: blue;" title="Color Azul"></i>
+                                                <i id="colorRojo" class="icono fas fa-circle" style="color: red;" title="Color Rojo"></i>
+                                                <i id="colorAmarillo" class="icono fas fa-circle" style="color: yellow;" title="Color Amarillo"></i>
+                                                
+                                                <i id="borrador" class="icono fas fa-eraser" title="Borrador"></i>
+                                                <i id="tamanoPequeno" class="icono fas fa-circle" style="font-size: 10px;" title="Borrador Pequeño"></i>
+                                                <i id="tamanoMediano" class="icono fas fa-circle" style="font-size: 15px;" title="Borrador Mediano"></i>
+                                                <i id="tamanoGrande" class="icono fas fa-circle" style="font-size: 20px;" title="Borrador Grande"></i>
+
+                                                <i id="guardar" class="icono fas fa-save" title="Guardar"></i>
+                                            </div>
+                                            
+                                        <div class="form-group row">
+                                            <div id="canvasContainer" class="mb-5">
+                                                    <canvas id="backgroundCanvas" width="600" height="400"></canvas>
+                                                    <canvas id="drawingCanvas" width="600" height="400"></canvas>
+                                            </div>
+                                        </div>
+                                        <script src="js/script.js"></script>
+
+
+                                        
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ////Sección de herramientas e imagen -->
+                </div> <!-- Fin step 2 -->
+
+                <!-- Step 3-->
+                <div id="step-3">
+                    <h2 class="StepTitle">Step 3 Especificaciones</h2>
+                    <div class="row justify-content-center"> <!-- Centrado horizontal -->
+                        <div class="col-md-6"> <!-- Ajusta el ancho según prefieras -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="Especificaciones2">Especificaciones2:</label>
+                                    <textarea id="Especificaciones2" name="Especificaciones2" required="required" class="form-control" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Registre las Especificaciones" data-parsley-validation-threshold="10"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- Fin Step 3-->
+
+                <div id="step-4">
+                    <h2 class="StepTitle">Step 4 Diagn&oacute;stico</h2>
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-10">
+                                    <label for="nombrePaciente">Diagnostico: </label>
+                                    <textarea id="Diagnostico" name="Diagnostico" required="required" class="form-control" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Registre las Diagnostico" data-parsley-validation-threshold="10"></textarea>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="edad">CIE-10:</label>
+                                    <input type="text" id="cie10" name="cie10" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- Fin Step 4-->
+
+                <div id="step-5">
+                    <h2 class="StepTitle">Step 5 Examenes aux.</h2>
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <label for="antecedentes">Examenes auxiliares:</label>
+                                    <textarea id="exauxiliares" name="exauxiliares" required="required" class="form-control" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Registre los examenes auxiliares" data-parsley-validation-threshold="10"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!--Fin Step 5-->
+
+                <div id="step-6">
+                    <h2 class="StepTitle">Step 6 Tratamiento</h2>
+                    <!-- Especificaciones y Tratamiento -->
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label for="antecedentes">Referencias:</label>
+                                            <textarea id="Referencias" name="Referencias" required="required" class="form-control" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Registre las referencias" data-parsley-validation-threshold="10"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label for="antecedentes">Tratamiento realizado:</label>
+                                            <textarea id="Tratamientorealizado" name="Tratamientorealizado" required="required" class="form-control" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Registre el tratamiento realizado" data-parsley-validation-threshold="10"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Fin de Especificaciones y Tratamiento -->
+                </div>
+
+                <div id="step-7">
+                    <h2 class="StepTitle">Step 7 Receta</h2>
+                    <!-- Especificaciones y Tratamiento -->
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                            <label for="receta">Receta:</label>
+                                            <textarea id="receta" name="receta" required="required" class="form-control" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Registre el tratamiento realizado" data-parsley-validation-threshold="10"></textarea>
+                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- Fin de Especificaciones y Tratamiento -->
+                </div> <!--Fin step-7-->
+
+            </div>
+            <!-- End SmartWizard Content -->
+
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- FastClick no hace nada -->
+    <script src="vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress no hace nada -->
+    <script src="vendors/nprogress/nprogress.js"></script>
+
+    <!-- jQuery Smart Wizard -->
+    <script src="vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="build/js/custom.min.js"></script>
+
+        <!-- Inicialización del Smart Wizard -->
+        <script>
+            $(document).ready(function(){
+                $('#wizard').smartWizard();
+            });
+        </script>
+</body>
+</html>

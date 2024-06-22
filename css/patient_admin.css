@@ -1,0 +1,59 @@
+/* Estilos para el contenedor de la tabla */
+.table-container {
+    width: 100%;
+    height: 134px; /* Ajustar este valor según el contenido de la tabla */
+    overflow-y: auto; /* Habilitar scroll vertical si necesario */
+    margin-bottom: 20px;
+}
+
+/* Estilos para la tabla */
+.mis-citas-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Estilos para las celdas */
+.mis-citas-table th, .mis-citas-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Estilos para el encabezado de la tabla */
+.mis-citas-table th {
+    background-color: #f2f2f2;
+    color: #333; /* Texto más oscuro para el encabezado */
+}
+
+/* Estilos para el pie de página de la tabla */
+.mis-citas-table tfoot {
+    font-weight: bold;
+}
+
+/* Estilos para el título de la tabla */
+.mis-citas-table caption {
+    font-size: 1.5em; /* Tamaño de fuente grande */
+    font-weight: bold; /* Texto en negrita */
+    color: #656565; /* Color de texto celeste */
+    /* background-color: #f2f2f2; /* Fondo gris claro */
+    padding: 10px; /* Espaciado interno */
+    border-bottom: 2px solid #ccc; /* Borde inferior gris */
+    text-align: center; /* Centrar el texto */
+    /* text-shadow: 2px 2px 2px rgba(0,0,0,0.3); /* Sombra del texto */
+}
+
+/* Estilos para las filas pares */
+.mis-citas-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Color de fondo tenue para filas pares */
+}
+
+/* Estilos para el texto */
+.mis-citas-table th, .mis-citas-table td {
+    color: #555; /* Color de texto más oscuro para celdas */
+    font-size: 11px; /* Tamaño de texto */
+}
+
+.error-message {
+    color: #ff4500; /* Naranja fuerte */
+    font-size: small;
+}

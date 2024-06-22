@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/IconoCentroOftalmologicoTorres.ico">
+
+    <title>Pacientes</title>
+    <style>
+        .popup {
+            animation: transitionIn-Y-bottom 0.5s;
+        }
+
+        .sub-table {
+            animation: transitionIn-Y-bottom 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+    <?php
+
+    //learn from w3schools.com
+
+    session_start();
+
+    if (isset($_SESSION["user"])) {
+        if (($_SESSION["user"]) == "" or $_SESSION['usertype'] != 'd') {
+            header("location: ../login.php");
+        } else {
+            $useremail = $_SESSION["user"];
+        }
+    } else {
+        header("location: ../login.php");
+    }
+
+
+    //import database
+    include("../connection.php");
+    $userrow = $database->query("select * from doctor where docemail='$useremail'");
+    $userfetch = $userrow->fetch_assoc();
+    $userid = $userfetch["docid"];
+    $username = $userfetch["docname"];
+
+    //echo $userid;
+    //echo $username;
+    ?>
+    <div class="container">
+        <div class="menu">
+            <table class="menu-container" border="0">
+                <tr>
+                    <td style="padding:10px" colspan="2">
+                        <table border="0" class="profile-container">
+                            <tr>
+                                <td width="30%" style="padding-left:20px">
+                                    <img src="../img/CentroOftalmologicoTorresIII.png" alt="" width="100%" style="border-radius:50%">
+                                </td>
+                                <td style="padding:0px;margin:0px;">
+                                    <p class="profile-title"><?php echo 'Doctor';  ?></p>
+                                    <p class="profile-subtitle"><?php echo substr($username, 0, 13);  ?></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <a href="../logout.php"><input type="button" value="Cerrar Sesión" class="logout-btn btn-primary-soft btn"></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-dashbord">
+                        <a href="index.php" class="non-style-link-menu ">
+                            <div>
+                                <p class="menu-text">Inicio</p>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-appoinment">
+                        <a href="appointment.php" class="non-style-link-menu">
+                            <div>
+                                <p class="menu-text">Mis Citas</p>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-session">
+                        <a href="schedule.php" class="non-style-link-menu">
+                            <div>
+                                <p class="menu-text">Mi Programación</p>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-patient menu-active menu-icon-patient-active">
+                        <a href="patient.php" class="non-style-link-menu  non-style-link-menu-active">
+                            <div>
+                                <p class="menu-text">Mis Pacientes</p>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-settings   ">
+                        <a href="settings.php" class="non-style-link-menu">
+                            <div>
+                                <p class="menu-text">Configuración</p>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div> <!-- FIN Div menu -->
+            <?php
+                $selecttype = "Mis";
+                $current = "Solo mis Pacientes";
+                if ($_POST) {
+                    if (isset($_POST["search"])) {
+                        $keyword = $_POST["search12"];
+                        $sqlmain="SELECT ap.appoid ,ap.pid ,ap.apponum ,ap.scheduleid ,ap.appodate ,p.pid ,p.pemail ,p.pname ,p.ppassword ,p.paddress ,p.pDNI ,FORMAT(DATEDIFF(CURDATE(), p.pFNac)/365.25, 0) AS pFNac ,p.ptel ,sh.scheduleid ,sh.docid ,sh.title ,sh.scheduledate ,sh.scheduletime ,sh.nop   
+                        FROM appointment ap INNER JOIN patient p ON p.pid=ap.pid INNER JOIN schedule sh ON sh.scheduleid=ap.scheduleid WHERE DATE(ap.appodate) = CURDATE() and (p.pemail='$keyword' or p.pname='$keyword' or p.pname like '$keyword%' or p.pname like '%$keyword' or p.pname like '%$keyword%')";
+                        //$sqlmain = "select pid, pemail, pname, ppassword, paddress, pDNI, FORMAT(DATEDIFF(CURDATE(), pFNac)/365.25, 0) AS pFNac, ptel from patient where pemail='$keyword' or pname='$keyword' or pname like '$keyword%' or pname like '%$keyword' or pname like '%$keyword%' ";
+                        $selecttype = "my";
+                    }
+
+                    if (isset($_POST["filter"])) {
+                        if ($_POST["showonly"] == 'all') {
+                            $sqlmain = "SELECT ap.appoid ,ap.pid ,ap.apponum ,ap.scheduleid ,ap.appodate ,p.pid ,p.pemail ,p.pname ,p.ppassword ,p.paddress ,p.pDNI ,FORMAT(DATEDIFF(CURDATE(), p.pFNac)/365.25, 0) AS pFNac ,p.ptel ,sh.scheduleid ,sh.docid ,sh.title ,sh.scheduledate ,sh.scheduletime ,sh.nop   
+                            FROM appointment ap INNER JOIN patient p ON p.pid=ap.pid INNER JOIN schedule sh ON sh.scheduleid=ap.scheduleid WHERE DATE(ap.appodate) = CURDATE()";
+                            //$sqlmain = "select pid, pemail, pname, ppassword, paddress, pDNI, FORMAT(DATEDIFF(CURDATE(), pFNac)/365.25, 0) AS pFNac, ptel from patient;";
+                            $selecttype = "All";
+                            $current = "All patients";
+                        } else {
+                            $sqlmain = "SELECT ap.appoid ,ap.pid ,ap.apponum ,ap.scheduleid ,ap.appodate ,p.pid ,p.pemail ,p.pname ,p.ppassword ,p.paddress ,p.pDNI ,FORMAT(DATEDIFF(CURDATE(), p.pFNac)/365.25, 0) AS pFNac ,p.ptel ,sh.scheduleid ,sh.docid ,sh.title ,sh.scheduledate ,sh.scheduletime ,sh.nop   
+                            FROM appointment ap INNER JOIN patient p ON p.pid=ap.pid INNER JOIN schedule sh ON sh.scheduleid=ap.scheduleid WHERE DATE(ap.appodate) = CURDATE()and sh.docid=$userid;";
+                            $selecttype = "Mis";
+                            $current = "Solo mis Pacientes";
+                        }
+                    }
+                } else {
+                    $sqlmain = "SELECT ap.appoid ,ap.pid ,ap.apponum ,ap.scheduleid ,ap.appodate ,p.pid ,p.pemail ,p.pname ,p.ppassword ,p.paddress ,p.pDNI ,FORMAT(DATEDIFF(CURDATE(), p.pFNac)/365.25, 0) AS pFNac ,p.ptel ,sh.scheduleid ,sh.docid ,sh.title ,sh.scheduledate, sh.scheduletime, sh.nop, 
+                    CASE ap.estadoattenc
+                        WHEN 1 THEN 'Citado'
+                        WHEN 2 THEN 'En atencion'
+                        WHEN 3 THEN 'Atendido'
+                        ELSE 'Desconocido'
+                    END AS estadoatencion 
+                    FROM appointment ap INNER JOIN patient p ON p.pid=ap.pid INNER JOIN schedule sh ON sh.scheduleid=ap.scheduleid WHERE sh.docid=$userid ORDER BY ap.apponum ASC, ap.estadoattenc ASC;";
+                    //pid, pemail, pname, ppassword, paddress, pDNI, FORMAT(DATEDIFF(CURDATE(), pFNac)/365.25, 0) AS edad, ptel
+                    $selecttype = "Mis";
+                }
+            ?>
+        <div class="dash-body">
+            <table border="0" width="100%" style=" border-spacing: 0;margin:0;padding:0;margin-top:25px; ">
+                <tr>
+                    <td width="13%">
+                        <a href="index.php">
+                            <button class="login-btn btn-primary-soft btn btn-icon-back" style="padding-top:11px;padding-bottom:11px;margin-left:20px;width:125px">
+                                <font class="tn-in-text">Volver</font>
+                            </button>
+                        </a>
+                    </td>
+                    <td>
+                        <form action="" method="post" class="header-search">
+                            <input type="search" name="search12" class="input-text header-searchbar" placeholder="Búsqueda Nombre de Paciente o Email" list="patient">&nbsp;&nbsp;
+                            <?php
+                                echo '<datalist id="patient">';
+                                $list11 = $database->query($sqlmain);
+                                //$list12= $database->query("select * from appointment inner join patient on patient.pid=appointment.pid inner join schedule on schedule.scheduleid=appointment.scheduleid where schedule.docid=1;");
+                                for ($y = 0; $y < $list11->num_rows; $y++) {
+                                    $row00 = $list11->fetch_assoc();
+                                    $d = $row00["pname"];
+                                    $c = $row00["pemail"];
+                                    echo "<option value='$d'><br/>";
+                                    echo "<option value='$c'><br/>";
+                                };
+                                echo ' </datalist>';
+                            ?>
+                            <input type="Submit" value="Búsqueda" name="search" class="login-btn btn-primary btn" style="padding-left: 25px;padding-right: 25px;padding-top: 10px;padding-bottom: 10px;">
+                        </form>
+                    </td>
+                    <td width="15%">
+                        <p style="font-size: 14px;color: rgb(119, 119, 119);padding: 0;margin: 0;text-align: right;">Fecha</p>
+                        <p class="heading-sub12" style="padding: 0;margin: 0;">
+                            <?php
+                                date_default_timezone_set('America/Bogota');
+                                $date = date('Y-m-d');
+                                echo $date;
+                            ?>
+                        </p>
+                    </td>
+                    <td width="10%">
+                        <button class="btn-label" style="display: flex;justify-content: center;align-items: center;"><img src="../img/calendar.svg" width="100%"></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="padding-top:10px;">
+                        <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)"><?php echo $selecttype . " Pacientes (" . $list11->num_rows . ")"; ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="padding-top:0px;width: 100%;">
+                        <center>
+                            <table class="filter-container" border="0">
+                                <form action="" method="post">
+                                    <td style="text-align: right;">
+                                        Mostrar Información de: &nbsp;
+                                    </td>
+                                    <td width="30%">
+                                        <select name="showonly" id="" class="box filter-container-items" style="width:90% ;height: 37px;margin: 0;">
+                                            <option value="" disabled selected hidden><?php echo $current   ?></option><br />
+                                            <option value="my">Solo mis Pacientes</option><br />
+                                            <option value="all">Todos los Pacientes</option><br />
+                                        </select>
+                                    </td>
+                                    <td width="12%">
+                                        <input type="submit" name="filter" class="btn-primary-soft btn button-icon btn-filter" value="  Buscar" style="padding: 15px; margin :0;width:100%">
+                                    </td>
+                                </form>
+                            </table>
+                        </center>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="4">
+                        <center>
+                            <div class="abc scroll">
+                                <table width="93%" class="sub-table scrolldown" style="border-spacing:0;">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-headin">
+                                                Nombre
+                                            </th>
+                                            <th class="table-headin">
+                                                DNI
+                                            </th>
+                                            <th class="table-headin">
+                                                Teléfono
+                                            </th>
+                                            <th class="table-headin">
+                                                Email
+                                            </th>
+                                            <th class="table-headin">
+                                                Edad
+                                            </th>
+                                            <th class="table-headin">
+                                                Estado
+                                            </th>
+                                            <th class="table-headin">
+                                                Eventos
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $result = $database->query($sqlmain);
+                                        //echo $sqlmain;
+                                        if ($result->num_rows == 0) {
+                                            echo '<tr>
+                                            <td colspan="4">
+                                            <br><br><br><br>
+                                            <center>
+                                            <img src="../img/notfound.svg" width="25%">
+                                            <br>
+                                            <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">No pudimos encontrar nada relacionado con sus palabras clave. !</p>
+                                            <a class="non-style-link" href="patient.php"><button  class="login-btn btn-primary-soft btn"  style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp; Show all Pacientes &nbsp;</font></button>
+                                            </a>
+                                            </center>
+                                            <br><br><br><br>
+                                            </td>
+                                            </tr>';
+                                        } else {
+                                            for ($x = 0; $x < $result->num_rows; $x++) {
+                                                $row = $result->fetch_assoc();
+                                                $pid = $row["pid"];
+                                                $name = $row["pname"];
+                                                $email = $row["pemail"];
+                                                $nic = $row["pDNI"];
+                                                $dob = $row["pFNac"];
+                                                $tel = $row["ptel"];
+                                                $atention = $row["appoid"]; //IdCita
+                                                $estadoatencion = $row["estadoatencion"];
+
+                                                echo '<tr><td> &nbsp;'.substr($name, 0, 35).'</td><td>' . substr($nic, 0, 12) . '</td><td>' . substr($tel, 0, 10) . '
+                                                    </td><td>'.substr($email, 0, 20).'</td><td>'.substr($dob, 0, 10).'</td><td>'.$estadoatencion.'</td>
+                                                    <td>
+                                                        <div style="display:flex;justify-content: center;">
+                                                            <a href="?action=view&id=' . $pid . '&atention='.$atention.'" class="non-style-link">
+                                                                <button class="btn-primary-soft btn button-icon btn-view" 
+                                                                        style="padding-left: 40px; padding-top: 12px; padding-bottom: 12px; margin-top: 10px;">
+                                                                    <font class="tn-in-text">Ver</font>
+                                                                </button>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>';
+                                            }
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+        <?php
+            if ($_GET) {
+                $atention=$_GET["atention"];
+                $id = $_GET["id"];
+                $action = $_GET["action"];
+                $sqlmain = "SELECT pname, pDNI, pFNac, FORMAT(DATEDIFF(CURDATE(), pFNac)/365.25, 0) AS edad, ptel, paddress, pemail FROM patient where pid='$id'";
+                $result = $database->query($sqlmain);
+                $row = $result->fetch_assoc();
+                $name = $row["pname"];
+                $email = $row["pemail"];
+                $nic = $row["pDNI"];
+                $edad = $row["edad"];
+                $dob = $row["pFNac"];
+                $tele = $row["ptel"];
+                $address = $row["paddress"];
+                echo '
+                    <div id="popup1" class="overlay">
+                            <div class="popup" style="width: 70%; height: 75%">
+                            <center>
+                                <a class="close" href="patient.php">&times;</a>
+                                <div class="content">
+                                </div>
+                                <div class="abc scroll" style="display: flex;justify-content: center;">
+                                <table width="80%" height="70%" class="sub-table scrolldown add-doc-form-container" border="0">
+                                    <tr>
+                                        <td>
+                                            <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">Mi Paciente</p><br>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-td" colspan="5">
+                                            <label for="name" class="form-label" ><strong>Nombre: </strong>' . $name . '</label>
+                                        </td><br>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-td" colspan="2">
+                                            <label for="nic" class="form-label"><strong>DNI: </strong></label>
+                                        </td>
+                                        <td class="label-td" colspan="2">
+                                            <label for="name" class="form-label"><strong>Fecha de Nacimiento: </strong></label>
+                                        </td>
+                                        <td class="label-td" colspan="2">
+                                            <label for="Tele" class="form-label"><strong>Tel&eacute;fono: </strong></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-td" colspan="2">
+                                            ' . $nic . '<br><br>
+                                        </td>
+                                        <td class="label-td" colspan="2">
+                                            ' . $dob . ' ('.$edad.' años)<br><br>
+                                        </td>
+                                        <td class="label-td" colspan="2">
+                                            ' . $tele . '<br><br>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-td" colspan="3">
+                                            <label for="spec" class="form-label"><strong>Direcci&oacute;n: </strong></label>
+                                        </td>
+                                        <td class="label-td" colspan="2">
+                                            <label for="Email" class="form-label"><strong>Correo: </strong></label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-td" colspan="3">
+                                            ' . $address . '<br><br>
+                                        </td>
+                                        <td class="label-td" colspan="2">
+                                            ' . $email . '<br><br>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <a href="attention_patien.php?id='.$id.'&atention='.$atention.'"><input type="button" value="Atender" class="login-btn btn-primary-soft btn" ></a>
+                                        </td>
+                                        <td>
+                                            <a href="attention_patien.php?id='.$id.'&atention='.$atention.'"><input type="button" value="Examenes externos" class="login-btn btn-primary-soft btn" ></a>
+                                        </td>
+                                    </tr>
+                                </table>
+                                </div>
+                            </center>
+                            <br>
+                    </div>
+                    </div>
+                    ';
+            };
+        ?>
+
+
+</body>
+
+</html>

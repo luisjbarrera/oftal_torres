@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buscar Medicamento</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+
+<script src="script.js"></script>
+<!-- Otros elementos del head -->
+<!-- <link rel="stylesheet" type="text/css" href="path/to/your/cssfile.css"> -->
+
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        /* Estilos para la tabla */
+        #medicinesTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #medicinesTable th, #medicinesTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        /* Estilos para formularios */
+        #searchForm {
+            margin-bottom: 20px;
+        }
+
+        #searchMedicine {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+
+        .container {
+            /* max-width: 600px; */ /* Ajusta esto según tus necesidades */
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 600px) {
+            #medicinesTable th, #medicinesTable td {
+                display: block;
+            }
+        }
+
+        /* Estilos adicionales para la lista de sugerencias */
+        #suggestions {
+            border: 1px solid #ddd;
+            border-top: none; /* Oculta el borde superior para que parezca parte del input */
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0;
+            display: none; /* Inicia sin mostrar la lista */
+            position: absolute; /* Para que la lista se muestre sobre el contenido siguiente */
+            background-color: white;
+            width: calc(100% - 20px); /* Asume un padding en el input de 10px */
+            max-height: 300px; /* Puedes ajustar esto como lo veas necesario */
+            overflow-y: auto; /* Permite scroll si la lista es muy larga */
+            z-index: 1000; /* Asegura que la lista se muestre sobre otros elementos */
+        }
+        #suggestions li {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        #suggestions li:hover {
+            background-color: #73aaf1;
+        }
+
+        /* Agregar tus estilos aquí */
+        .search-box {
+            position: relative;
+            /* display: inline-block; */
+            margin-bottom: 20px;
+        }
+
+        #searchMedicine {
+            width: 100%;
+            padding: 10px;
+            padding-right: 40px; /* Espacio para el botón 'X' */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #clearSearch {
+        position: absolute;
+        right: 0px; /* Ajusta la posición derecha para que no sobresalga */
+        top:40%;
+        /* bottom: 0;*/
+        transform: translateY(-50%); /* Centrar verticalmente */
+        height: calc(100% - 0px); /* Ajusta la altura para que no sobresalga, resta los píxeles según el padding */
+        margin: auto;
+        padding: 0 0px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        }
+
+        /* Estilos adicionales para el botón, si es necesario */
+        #clearSearch:hover {
+            background-color: rgba(255, 255, 255, 0.5); /* Blanco con 50% de transparencia */
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #btnAddToList {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #btnAddToList:hover {
+            background-color: #4cae4c;
+        }
+
+        #medicinesList {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #medicinesList thead {
+            background-color: #f1f1f1;
+        }
+
+        #medicinesList th,
+        #medicinesList td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        #suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-top: none;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: none; /* Ocultar hasta que haya sugerencias */
+        }
+
+        #suggestions li {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #suggestions li:hover {
+            background-color: #efefef;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <div class="col-md-12 form-group has-feedback">
+            <div class="col-md-9  search-box">
+                <label for="quantity">Medicamento:</label>
+                <input type="text" id="searchMedicine" name="searchMedicine" placeholder="Buscar medicamento...">
+                <button id="clearSearch">X</button>
+                <ul id="suggestions"></ul>
+            </div>
+            <div class="col-md-3 input-group">
+                <label for="quantity">Cantidad:</label>
+                <input type="number" id="quantity" name="quantity">
+            </div>
+            <div class="col-md-9 input-group">
+                <label for="description">Descripción:</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            <div class="col-md-3 input-group">
+                <button type="button" id="btnAddToList">Agregar a la lista</button>
+                <button type="button" id="btnSavePrescription" disabled>Guardar Receta</button>
+            </div>
+            <div class="col-md-12 input-group">
+                <table id="medicinesList">
+                    <thead>
+                        <tr>
+                            <th>Medicamento</th>
+                            <th>Cantidad</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Los elementos de la lista se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Asegúrate de que el DOM esté cargado
+    $(document).ready(function() {
+        // Puedes llamar a la función AJAX al cargar la página
+        loadMedicines();
+    
+        // O cuando se realiza alguna acción, como clic en un botón
+        $('#btnLoadMedicines').click(function() {
+            loadMedicines();
+        });
+    
+        function loadMedicines() {
+            $.ajax({
+                url: 'searchMedicine.php', // URL al archivo PHP que devuelve los medicamentos
+                type: 'GET',
+                dataType: 'json', // Esperamos una respuesta en formato JSON
+                success: function(response) {
+                    // Carga los medicamentos en la tabla
+                    loadMedicinesIntoTable(response);
+                },
+                error: function(xhr, status, error) {
+                    // Manejar el error
+                    console.error("Ha ocurrido un error: " + error);
+                }
+            });
+        }
+    
+        function loadMedicinesIntoTable(medicines) {
+            // Encuentra el cuerpo de la tabla donde se cargarán los medicamentos
+            var tableBody = $('#medicinesTable tbody');
+            // Vacía el cuerpo actual de la tabla para evitar duplicados
+            tableBody.empty();
+
+            // Itera a través de la lista de medicamentos y crea una fila por cada uno
+            medicines.forEach(function(medicine) {
+                // Crea una fila de tabla y celdas para los detalles del medicamento
+                var row = $('<tr></tr>');
+                row.append($('<td></td>').text(medicine.id)); // Suponiendo que 'name' es una propiedad del objeto medicamento
+                row.append($('<td></td>').text(medicine.nombremed)); // Suponiendo 'dosage'
+                row.append($('<td></td>').text(medicine.formafarmaceutica)); // Suponiendo 'description'
+                // Agrega un botón o enlace para editar y eliminar si es necesario
+                //row.append($('<td><button class="editBtn">Editar</button></td>'));
+                row.append($('<td><button class="deleteBtn">Eliminar</button></td>'));
+
+                // Agrega la fila al cuerpo de la tabla
+                tableBody.append(row);
+                
+            });
+        }
+
+    
+        // Otros manejadores de eventos y funciones aquí
+        function clearSearchField() {
+            document.getElementById('searchMedicine').value = ''; // Clear the input field
+            // If you have a suggestions list, you might want to hide it too
+            //document.getElementById('suggestionsList').style.display = 'none';
+        }
+    });
+
+
+    $(document).ready(function() {
+
+            $('#searchMedicine').keyup(function() {
+                var query = $(this).val();
+                if (query.length > 0) {
+                    $.ajax({
+                        url: 'searchMedicine.php',
+                        type: 'GET',
+                        data: { query: query },
+                        dataType: 'json',
+                        success: function(response) {
+                            var suggestionsList = $('#suggestions');
+                            suggestionsList.empty(); // Limpia las sugerencias anteriores
+                            suggestionsList.show(); // Muestra la lista de sugerencias
+                            response.forEach(function(item) {
+                                suggestionsList.append(
+                                    $('<li></li>').text(item.nombremed).click(function() {
+                                        // Completa el input al hacer clic en una sugerencia
+                                        $('#searchMedicine').val(item.nombremed);
+                                        suggestionsList.hide(); // Oculta la lista de sugerencias
+                                    })
+                                );
+                            });
+                        }
+                    });
+                } else {
+                    $('#suggestions').hide(); // Oculta la lista si no hay entrada
+                }
+                
+                
+            });
+            
+            // Ocultar sugerencias al hacer clic fuera
+            $(document).click(function (e) {
+                if (!$(e.target).is('#searchMedicine, #suggestions, #suggestions *')) {
+                    $('#suggestions').hide();
+                }
+            });
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var clearBtn = document.getElementById('clearSearch');
+            var searchInput = document.getElementById('searchMedicine');
+
+            clearBtn.addEventListener('click', function() {
+                searchInput.value = ''; // Clear the input field
+                // Si tienes una lista de sugerencias, quizás también quieras ocultarla
+                // document.getElementById('suggestionsList').style.display = 'none';
+            });
+        });
+
+        $("#btnSavePrescription").click(function() {
+            var medicines = [];
+            $("#medicinesList tbody tr").each(function() {
+                var row = $(this);
+                var medicine = {
+                    medicine: row.find("td").eq(0).text(),
+                    quantity: row.find("td").eq(1).text(),
+                    description: row.find("td").eq(2).text()
+                };
+                medicines.push(medicine);
+            });
+            
+            $("#medicinesList tbody").empty(); // Limpia la tabla antes de enviar los datos
+            $.ajax({
+                url: 'savePrescription.php',
+                type: 'POST',
+                data: { prescription: medicines },
+                success: function(response) {
+                    console.log(response);
+                    //$("#medicinesList tbody").empty(); // Limpia la tabla
+                    //alert('La receta se ha guardado con éxito.'); // Mensaje de confirmación
+                    Swal.fire( // Mensaje de confirmación con SweetAlert2
+                        '¡Guardado!',
+                        'La receta se ha guardado con éxito.',
+                        'success'
+                    );
+                },
+                error: function(xhr, status, error) {
+                    console.error("Ha ocurrido un error: " + error);
+                }
+            });
+
+
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+.dashbord-tables,
+.doctor-heade {
+    animation: transitionIn-Y-over 0.5s;
+}
+
+.filter-container {
+    animation: transitionIn-Y-bottom 0.5s;
+}
+
+.sub-table,
+#anim {
+    animation: transitionIn-Y-bottom 0.5s;
+}
+
+
+/* Estilos para las pestañas */
+body {
+    font-family: Arial, sans-serif;
+    /* background-color: #f1f1f1; */
+    margin: 0;
+    padding: 20;
+}
+
+/* Estilos para los contenedores de las pestañas */
+.custom-tab-container {
+    margin: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Estilos para las pestañas */
+.custom-tab-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    float: left;
+    transition: background-color 0.3s;
+}
+
+/* Estilo para el botón de la pestaña activa */
+.custom-active-button {
+    background-color: #45a049;
+}
+
+/* Estilos para el contenido de las pestañas */
+.custom-tab-content {
+    display: none;
+    padding: 20px;
+    background-color: white;
+    color: #333;
+}
+
+/* Estilo para el contenido de la pestaña activa */
+.custom-active {
+    display: block;
+}
+
+/* Estilo específico para el fieldset */
+fieldset {
+    background-color: #eeeeee;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+/* Estilo específico para el legend dentro del fieldset */
+fieldset legend {
+    background-color: gray;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 10px; /* Añade un margen inferior para separarlo de los demás elementos */
+}
+
+/* Estilo específico para los inputs dentro del fieldset */
+fieldset input {
+    margin: 5px;
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+/* Estilo específico para el submit button dentro del fieldset */
+fieldset input[type="submit"] {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* Cambiar el estilo del cursor al pasar sobre el botón */
+fieldset input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.form-control {
+    display: inline-block;
+    width: 10%; /* Ajusta el ancho según tus necesidades */
+    margin-right: 10px; /* Espacio entre los input */
+    margin-bottom: 10px; /* Espacio debajo de los input */
+}
+
+h3 {
+    margin-top: 20px; /* Espacio entre los encabezados */
+}
+
+    /* Estilos generales */
+    .custom-fieldset {
+        display: inline-block;
+            /*  Si reemplazo este código con la linea anterior, todos los fielsed se mostraran de manera vertical */
+            /* display: flex; */
+            /* flex-direction: column; */
+
+        width: 30%; /* Ancho inicial del primer fieldset */
+        margin: 10px;
+        margin-right: 10px; /* Margen derecho entre fieldsets */
+        vertical-align: top; /* Alineación vertical superior */
+        border: 1px solid #ddd; /* Borde gris */
+        border-radius: 5px; /* Esquinas redondeadas */
+        padding: 10px; /* Espaciado interno */
+    }
+
+    .custom-fieldset legend {
+        font-weight: bold;
+    }
+
+    .custom-fieldset div {
+        display: grid;
+        /* grid-template-columns: 40% 30% 30%; */
+        grid-template-columns: 40% 25% 25%;
+        gap: 5px; /* Espacio entre elementos */
+    }
+
+    .custom-fieldset label {
+        flex-basis: 50%; /* Ancho de cada label */
+    }
+
+    /* Estilos para el segundo fieldset */
+    .curstom-fieldset {
+        display: inline-block;
+        width: 40%; /* Ancho del segundo fieldset */
+        vertical-align: top; /* Alineación vertical superior */
+        border: 1px solid #ddd; /* Borde gris */
+        border-radius: 5px; /* Esquinas redondeadas */
+        padding: 10px; /* Espaciado interno */
+    }
+
+    /* Media query para dispositivos con ancho máximo de 768px */
+    @media only screen and (max-width: 768px) {
+        .custom-fieldset div {
+            grid-template-columns: 1fr; /* Una columna que ocupa todo el ancho */
+        }
+
+        .custom-fieldset, .curstom-fieldset {
+            width: 100%; /* Ocupar todo el ancho en dispositivos pequeños */
+        }
+    }
+
+    /* Tamaño de letra ajustado automáticamente */
+    label, input {
+        font-size: 1em; /* Tamaño de letra relativo */
+    }
+
+    .checkbox-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .custom-fieldset.checkbox div {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 5px; /* Espacio entre elementos */
+    }
+
+    .custom-fieldset.checkbox label {
+        display: block; /* Para que los checkboxes estén en líneas separadas */
+    }
+
+    /* Media query para dispositivos con ancho máximo de 768px */
+    @media only screen and (max-width: 768px) {
+        .custom-fieldset.checkbox div {
+            display: flex;
+            flex-wrap: wrap; /* Envolver elementos en filas */
+        }
+    }
+
+    #descripcionatencion, #motivoconsulta {
+        width: 100%; /* Ocupa todo el ancho disponible */
+        max-width: 100%; /* Máximo ancho */
+        min-width: 100px; /* Mínimo ancho */
+        resize: vertical; /* Permite redimensionar verticalmente */
+    }
+
+    .custom-fieldset.refraccion {
+        width: 80%; /* Ancho del fieldset */
+        margin: 0 auto; /* Centrar el fieldset */
+    }
+
+    .custom-table.refraccion {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .custom-table.refraccion .custom-row {
+        display: table-row;
+    }
+
+    .custom-table.refraccion .col {
+        display: table-cell;
+        padding: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .custom-table.refraccion .col:first-child {
+        font-weight: bold;
+        background-color: #f9f9f9;
+    }
+
+    .custom-form .custom-row {
+        display: flex;
+    }
+        .custom-form .custom-col {
+        flex: 1;
+    }
+        .custom-form .custom-col-2 {
+        flex: 2;
+    }
+
+
+
+/*
+#medicinesTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#medicinesTable th, #medicinesTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#searchForm {
+    margin-bottom: 20px;
+}
+
+#searchMedicine {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.container {
+    margin: auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+    #medicinesTable th, #medicinesTable td {
+        display: block;
+    }
+}
+
+.search-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#searchMedicine {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#clearSearch {
+    position: absolute;
+    right: 0px;
+    top:40%;
+    transform: translateY(-50%);
+    height: calc(100% - 0px);
+    margin: auto;
+    padding: 0 0px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+#clearSearch:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#btnAddToList {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#btnAddToList:hover {
+    background-color: #4cae4c;
+}
+
+#medicinesList {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#medicinesList thead {
+    background-color: #f1f1f1;
+}
+
+#medicinesList th,
+#medicinesList td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+*/
