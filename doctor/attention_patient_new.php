@@ -1131,8 +1131,8 @@
         <script src="../vendors/select2/dist/js/select2.full.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="./script.js"></script>
-
         <script>
+
     
             function changeTab(tabIndex) {
                 // Oculta todas las pestañas
@@ -1648,7 +1648,6 @@
             ///////////////////////////////////////////
 
 
-
             ///////////////////////////////
             //Guarda Examen oftalmologico
             $("#btnGuardaExamOftalm").click(function() {
@@ -1950,8 +1949,6 @@
             });
             //Fin Indice de Refraccion
             /////////////////////
-
-
 
             /////////////////////
             // Guarda Edicion Indice de Refraccion
